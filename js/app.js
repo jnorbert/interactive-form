@@ -1,7 +1,5 @@
-//Hide Your Job Role
-const $otherTitle = $(
-  '<input type="text" id="other-title" name="other" placeholder="Your Job Role">'
-).hide();
+//Hide Your Job Role input field
+const $otherTitle = $('#other-title').hide();
 
 //Focus on the Name field
 $('#name').focus();
@@ -93,6 +91,9 @@ const $selectMethod = $('#payment [value="select_method"]');
 $paypal.hide();
 $bitcoin.hide();
 
+//Set Credit Card as default payment method
+$('select option[value="credit card"]').attr('selected', true);
+
 //Display payment sections based on the payment option chosen in the select menu
 $('#payment').on('change', function() {
   if ($('#payment option:selected').val() === 'paypal') {
@@ -119,7 +120,6 @@ $('#payment').on('change', function() {
 //Name field can't be blank
 $(document).ready(function() {
   $('.container form').submit(function(e) {
-    e.preventDefault();
     let name = $('#name').val();
     let email = $('#mail').val();
     let cc = $('#cc-num').val();
@@ -130,10 +130,12 @@ $(document).ready(function() {
     $('.error').remove();
     if (name.length < 1) {
       $('#name').after(errorMessage);
+      e.preventDefault();
     }
 
     //Email field can't be blank
     if (email.length < 1) {
+      e.preventDefault();
       $('#mail').after(errorMessage);
     } else {
       let regEx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -154,6 +156,7 @@ $(document).ready(function() {
     //Credit card validation
     if (cc.length < 13) {
       $('#cc-num').after(errorMessage);
+      e.preventDefault();
     } else if (cc.length > 16) {
       $('#cc-num').after('<span class="error">Enter a valid CC number</span>');
     }
@@ -161,11 +164,13 @@ $(document).ready(function() {
     //Zip Code validation
     if (zipcode.length != 5) {
       $('#zip').after(errorMessage);
+      e.preventDefault();
     }
 
     //CVV Code validation
     if (cvv.length != 3) {
       $('#cvv').after(errorMessage);
+      e.preventDefault();
     }
   });
 });
